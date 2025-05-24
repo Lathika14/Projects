@@ -1,0 +1,121 @@
+package BusBooking;
+
+import java.util.*;
+
+class BankAccount {
+    private static int accountCounter = 1001;
+    private int accountNumber;
+    private String accountHolder;
+    private double balance;
+    private List<String> transactionHistory = new ArrayList<>();
+
+    // Constructor to initialize account
+    public BankAccount(String accountHolder, double initialDeposit) {
+        this.accountNumber = accountCounter++;
+        this.accountHolder = accountHolder;
+        this.balance = initialDeposit;
+        transactionHistory.add("Account opened with balance: $" + initialDeposit);
+    }
+
+    public int getAccountNumber() { return accountNumber; }
+    public String getAccountHolder() { return accountHolder; }
+    public double getBalance() { return balance; }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            transactionHistory.add("Deposited: $" + amount);
+            System.out.println("Successfully deposited $" + amount);
+        } else {
+            System.out.println("Invalid deposit amount.");
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && amount <= balance) {
+            balance -= amount;
+            transactionHistory.add("Withdrawn: $" + amount);
+            System.out.println("Successfully withdrawn $" + amount);
+        } else {
+            System.out.println("Invalid or insufficient funds.");
+        }
+    }
+
+    public void printTransactionHistory() {
+        System.out.println("\nTransaction History for Account " + accountNumber + ":");
+        for (String transaction : transactionHistory) {
+            System.out.println(transaction);
+        }
+    }
+}
+
+public class BankSystem {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<Integer, BankAccount> accounts = new HashMap<>();
+        int choice;
+
+        do {
+            System.out.println("\n1. Create Account\n2. Deposit\n3. Withdraw\n4. Check Balance\n5. Transaction History\n6. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter account holder name: ");
+                    String name = scanner.next();
+                    System.out.print("Enter initial deposit: ");
+                    double initialDeposit = scanner.nextDouble();
+                    BankAccount account = new BankAccount(name, initialDeposit);
+                    accounts.put(account.getAccountNumber(), account);
+                    System.out.println("Account created successfully! Account Number: " + account.getAccountNumber());
+                    break; 
+                case 2:
+                    System.out.print("Enter account number: ");
+                    int depositAcc = scanner.nextInt();
+                    if (accounts.containsKey(depositAcc)) {
+                        System.out.print("Enter amount to deposit: ");
+                        double amount = scanner.nextDouble();
+                        accounts.get(depositAcc).deposit(amount);
+                    } else {
+                        System.out.println("Invalid account number.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Enter account number: ");
+                    int withdrawAcc = scanner.nextInt();
+                    if (accounts.containsKey(withdrawAcc)) {
+                        System.out.print("Enter amount to withdraw: ");
+                        double amount = scanner.nextDouble();
+                        accounts.get(withdrawAcc).withdraw(amount);
+                    } else {
+                        System.out.println("Invalid account number.");
+                    }
+                    break;
+                case 4:
+                    System.out.print("Enter account number: ");
+                    int checkAcc = scanner.nextInt();
+                    if (accounts.containsKey(checkAcc)) {
+                        System.out.println("Balance: $" + accounts.get(checkAcc).getBalance());
+                    } else {
+                        System.out.println("Invalid account number.");
+                    }
+                    break;
+                case 5:
+                    System.out.print("Enter account number: ");
+                    int historyAcc = scanner.nextInt();
+                    if (accounts.containsKey(historyAcc)) {
+                        accounts.get(historyAcc).printTransactionHistory();
+                    } else {
+                        System.out.println("Invalid account number.");
+                    }
+                    break;
+                case 6:
+                    System.out.println("Exiting... Thank you!");
+                    break;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        } while (choice != 6);
+    }
+}
