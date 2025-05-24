@@ -1,0 +1,81 @@
+package Project;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+public class CheckOut {
+	WebDriver driver = null;
+	@Test
+	public void main() {
+		
+		WebElement loginusername = driver.findElement(By.xpath("//input[@id='user-name']"));
+		loginusername.sendKeys("standard_user");
+		System.out.println("type username name");
+		
+		WebElement loginpassword = driver.findElement(By.xpath("//input[@id='password']"));
+		loginpassword.sendKeys("secret_sauce");
+		System.out.println("type password name");
+		
+		WebElement login = driver.findElement(By.xpath("//input[@id='login-button']"));
+		login.click();
+		System.out.println("click the login");
+		
+		WebElement addtocart = driver.findElement(By.xpath("//div[@class='inventory_list']//div[1]//div[3]//button[1]"));
+		addtocart.click();
+		System.out.println("add to cart click");
+		
+		WebElement fill = driver.findElement(By.xpath("//*[name()='path' and contains(@fill,'currentCol')]"));
+		fill.click();
+		System.out.println("add to cart click nevicate the page");
+		
+		WebElement checkou = driver.findElement(By.xpath("//a[normalize-space()='CHECKOUT']"));
+		checkou.click();
+		System.out.println("click the checkout");
+		
+		WebElement firstname = driver.findElement(By.xpath("//input[@id='first-name']"));
+		firstname.sendKeys("Lathika");
+		System.out.println("enter the name");
+		
+		WebElement lastname = driver.findElement(By.xpath("//input[@id='last-name']"));
+		lastname.sendKeys("S");
+		System.out.println("enter the lastname");
+		
+		WebElement pin = driver.findElement(By.xpath("//input[@id='postal-code']"));
+		pin.sendKeys("3845237");
+		System.out.println("enter the pin ");
+		
+		WebElement conti = driver.findElement(By.xpath("//input[@value='CONTINUE']"));
+		conti.click();
+		System.out.println("click the continue button ");
+		
+		WebElement finish = driver.findElement(By.xpath("//a[normalize-space()='FINISH']"));
+		finish.click();
+		System.out.println("click the finish");
+		
+		WebElement equal = driver.findElement(By.xpath("//h2[normalize-space()='THANK YOU FOR YOUR ORDER']"));
+		Assert.assertEquals(equal.getText(), "THANK YOU FOR YOUR ORDER");
+			
+	}
+	
+	@BeforeMethod
+	public void Links() {
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofMinutes(1));
+		driver.get("https://www.saucedemo.com/v1/");
+		
+	}
+	@AfterMethod
+	public void Finished() {
+		driver.quit();
+	}
+
+}
